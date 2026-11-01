@@ -174,6 +174,9 @@ dialog{width:min(720px,calc(100% - 28px));max-height:88vh;overflow:auto;backgrou
 /* Fortress stairs need the full playfield below the health display. */
 .is-akkon-fortress .game-bottom{display:none}.is-akkon-fortress .hud-center{max-width:44%}.is-akkon-fortress .touch-controls{bottom:8px}
 
+/* Connection and readiness are separate; unused invitations never block a party. */
+.p2p-start-panel{border:1px solid #8e8058;background:#303622;padding:14px 16px;margin:0 0 14px}.p2p-start-panel.is-ready{border-color:#a9bd7b;background:#2b3b23}.p2p-start-panel>p{margin:0;color:#e0d6af;font-size:12px;line-height:1.75}.p2p-start-panel .p2p-actions{margin:12px 0 0}.p2p-start-panel>small{display:block;margin-top:10px;color:#b4bca0;font-size:10px;line-height:1.6}
+
 </style>
   <style data-game-style="hub.css">
 /* The knight's chamber. Original parchment, iron and burgundy interface. */
@@ -5178,6 +5181,32 @@ dialog.is-equipment-panel{width:min(970px,calc(100% - 28px));background:linear-g
       this._applyRemoteCommands(commands.map(c=>({...c,...(c.type==='unequip'?{equipmentSlot:c.slot}:{}),memberId:p.id,slot:p.slot})));
       this._send(p,{type:'ack',edge:this._acks[p.id]||0,command:this._commandAcks[p.id]||0});
     }
+    getStartStatus(){
+      const participants=[],pending=[],connecting=[],disconnected=[];
+      for(const raw of this.lobby?.members||[]){
+        const member={...raw};
+        if(member.slot===1){if(member.connected)participants.push(member);else disconnected.push(member);continue;}
+        if(this.isHost){
+          const peer=this._peers.get(member.slot);
+          if(peer?.joined&&peer.connected&&!peer.disposed&&peer.channel?.readyState==='open')participants.push({...member,connected:true,ready:!!peer.ready});
+          else if(peer?.joined)disconnected.push(member);
+          else if(peer?.answerAccepted&&!peer.disposed&&peer.status!=='failed')connecting.push(member);
+          else pending.push(member);
+        }else if(member.connected)participants.push(member);
+        else if(member.pending)pending.push(member);
+        else disconnected.push(member);
+      }
+      const count=participants.length,unready=participants.filter(member=>!member.ready),names=members=>members.map(member=>'Spieler '+member.slot+(member.name?' · '+member.name:'')).join(', ');
+      let reason='';
+      if(!this.active)reason='Öffne zuerst eine P2P-Gruppe.';
+      else if(this.playing)reason='Die Partie läuft bereits.';
+      else if(!this.isHost)reason='Der Gastgeber startet die Partie, sobald alle verbundenen Ritter bereit sind.';
+      else if(disconnected.length)reason='Verbindung zu '+names(disconnected)+' unterbrochen. Warte auf die Verbindung oder entferne '+(disconnected.length===1?'diesen Platz.':'diese Plätze.');
+      else if(connecting.length)reason=names(connecting)+(connecting.length===1?' verbindet sich':' verbinden sich')+' noch. Warte kurz oder entferne die Einladung.';
+      else if(count<2||!participants.some(member=>member.slot===1))reason='Verbinde mindestens einen Mitspieler. Zwei verbundene Ritter reichen zum Starten.';
+      else if(unready.length)reason=names(unready)+(unready.length===1?' muss':' müssen')+' noch auf „Ich bin bereit“ klicken.';
+      return {canStart:!reason,count,participants,unready,pending,connecting,disconnected,reason};
+    }
     async setReady(ready){if(!this.active||this.playing)return null;if(this.isHost){this.lobby.members.find(m=>m.slot===1).ready=!!ready;this._changedPeers();}else{const p=this._peers.get(1);if(!p?.connected)return null;this._send(p,{type:'ready',ready:!!ready});}return this.lobby;}
     async setProfile(profile){
       return this._action(async()=>{if(!this.active||this.playing)return false;this._profile=this._sanitizeProfile(profile);if(this.isHost){this._profiles[this._memberId]=this._profile;const member=this.lobby.members.find(m=>m.slot===1);member.orderId=this._profile?.orderId||'templar';this._changedPeers();}else{const p=this._peers.get(1);if(!p?.connected)return false;this._send(p,{type:'profile',profile:this._profile});}return this.lobby;},false);
@@ -5185,8 +5214,12 @@ dialog.is-equipment-panel{width:min(970px,calc(100% - 28px));background:linear-g
     async start(options={}){
       return this._action(async()=>{
         if(!this.active||!this.isHost||this.playing)throw fault('Nur der Gastgeber kann den Feldzug starten.','HOST_ONLY');
-        const members=this.lobby.members;if(members.length<2||members.some(m=>!m.connected||!m.ready))throw fault('Mindestens zwei Ritter müssen verbunden und bereit sein. Entferne unbenutzte Einladungen.','NOT_READY');
-        this._config=this._configFrom({...this._config,...options,settings:options.settings||this._config.settings});if(this._config.heroicTier>this._heroicTier(this._profile?.maxHeroicTier))throw fault('Diese heroische Stufe ist noch nicht freigeschaltet.','HEROIC_LOCKED');this.playing=true;this.lobby.status='playing';this.lobby.config=this._config;this._sessionAnnounced=true;
+        const status=this.getStartStatus();if(!status.canStart)throw fault(status.reason,'NOT_READY');
+        const config=this._configFrom({...this._config,...options,settings:options.settings||this._config.settings});if(config.heroicTier>this._heroicTier(this._profile?.maxHeroicTier))throw fault('Diese heroische Stufe ist noch nicht freigeschaltet.','HEROIC_LOCKED');
+        // A reserved invitation is not a player. Freeze the connected party and
+        // retire unused offers so they cannot join after this match has started.
+        for(const member of status.pending){const peer=this._peers.get(member.slot);if(peer)this._disposePeer(peer);this._peers.delete(member.slot);delete this._profiles[member.id];this._remoteHeld.delete(member.id);this._remoteSeq.delete(member.id);this._remoteSeenAt.delete(member.id);}
+        const members=status.participants;this._config=config;this.playing=true;this.lobby={...this.lobby,status:'playing',config,members};this._sessionAnnounced=true;
         const slots=members.map(m=>m.slot);this.game.setSettings?.(this._config.settings);this.game.start({players:Math.max(...slots),online:true,hotseat:false,levelIndex:this._config.levelIndex,connectedPlayerIds:slots,playerProfiles:this._startProfiles(),heroicTier:this._config.heroicTier,runProgress:this._config.runProgress});this._applyMembers();
         this._broadcast({type:'start',room:this.lobby});this._status('playing');this._emitLobby();this._emit('onSession',{room:this.lobby,isHost:true,localPlayerId:1,config:this._config});this._nextFrame=0;this.tick(0);return this.lobby;
       });
@@ -5664,7 +5697,7 @@ dialog.is-equipment-panel{width:min(970px,calc(100% - 28px));background:linear-g
  function renderP2PLobby(){
   if(!p2p?.active||p2p.playing||panelKind!=='p2p'||p2pBusy)return;
   if($('p2pAnswerInput'))p2pAnswerDraft=$('p2pAnswerInput').value;
-  const room=p2p.lobby,members=room?.members||[],self=members.find(m=>m.slot===p2p.localPlayerId),connected=members.filter(m=>m.connected),ready=members.length>=2&&members.every(m=>m.connected&&m.ready),slots=Object.keys(p2pSignals).map(Number).sort();
+  const room=p2p.lobby,members=room?.members||[],self=members.find(m=>m.slot===p2p.localPlayerId),start=p2p.getStartStatus(),connected=start.participants,ready=start.canStart,slots=Object.keys(p2pSignals).map(Number).sort();
   if(slots.length&&!slots.includes(p2pSelectedSlot))p2pSelectedSlot=slots[0];
   const roster=`<div class="online-roster p2p-peer">${[1,2,3,4].map(id=>{const m=members.find(m=>m.slot===id);return `<article class="${m?.ready&&m.connected?'ready ':''}${id===p2p.localPlayerId?'you ':''}${!m?'empty':''}"><span>P${id}</span><strong>${m?escape(m.name||'Ritter'):'Freier Platz'}</strong><small>${!m?'FREI':m.connected?(m.ready?'BEREIT':'VERBUNDEN'):m.status==='failed'?'VERBINDUNG FEHLGESCHLAGEN':'VERBINDUNG AUSSTEHEND'}${id===p2p.localPlayerId?' · DU':''}</small>${p2p.isHost&&id>1&&m?`<button class="subtle-button" data-p2p-remove="${id}">Entfernen</button>`:''}</article>`;}).join('')}</div>`;
   let body='';
@@ -5675,7 +5708,9 @@ dialog.is-equipment-panel{width:min(970px,calc(100% - 28px));background:linear-g
   }
   const n=connected.length,mobs=Math.ceil(({low:20,normal:36,high:56})[room?.config?.settings?.enemyDensity||settings.enemyDensity]*(1+.2*Math.max(0,n-1)));
   const warning=p2pWarnings[p2p.isHost?p2pSelectedSlot:p2p.localPlayerId]||'';
-  $('panelBody').innerHTML=`<p class="p2p-intro">${p2p.isHost?'Du bist der Gastgeber. Die erste Einladung wird automatisch erstellt.':'Du bist der Mitspieler. Schicke jetzt deinen Antworttext zurück.'}</p><p class="online-status" id="p2pStatus" role="status" aria-live="polite">${escape(p2pMessage||'Warte, bis alle verbundenen Ritter bereit sind.')}</p><p class="p2p-error" id="p2pError" role="alert">${escape(p2pErrorMessage)}</p>${warning?`<p class="p2p-help p2p-warning">${escape(warning)}</p>`:''}${body}${roster}<p class="online-meta">${n} / 4 verbunden · ${room?.config?.heroicTier?'HEROISCH '+room.config.heroicTier+' · ':''}${levels[room?.config?.levelIndex??selectedLevel]?.defense?'12 wachsende Wellen · +'+Math.round(Math.max(0,n-1)*20)+' % Gegner':mobs+' Gegner bei '+(n||1)+' '+(n===1?'Spieler':'Spielern')} · ${escape(levels[room?.config?.levelIndex??selectedLevel]?.name||'Palermo')}</p><div class="p2p-actions"><button class="subtle-button" id="p2pReady" ${self?.connected?'':'disabled'}>${self?.ready?'Bereitschaft zurücknehmen':'Ich bin bereit'}</button>${p2p.isHost?`<button class="primary-button" id="p2pStart" ${ready?'':'disabled'}>Mit ${n} Spielern starten</button>`:''}<button class="subtle-button" id="p2pLeave">Verbindung beenden</button></div><p class="p2p-help">Alle verbundenen Spieler klicken auf „Ich bin bereit“. Dann startet der Gastgeber. Entferne ungenutzte Einladungen vor dem Start. Der Gastgeber muss im Spiel bleiben.</p>`;
+  const startHint=p2p.isHost?(start.reason||`${n} Spieler sind verbunden und bereit. Du kannst jetzt starten.`):!self?.connected?'Schicke deinen Antworttext an den Gastgeber. Sobald die Verbindung steht, kannst du dich bereit melden.':self.ready?'Du bist bereit. Der Gastgeber kann die Partie starten, sobald alle verbundenen Spieler bereit sind.':'Du bist verbunden. Klicke jetzt auf „Ich bin bereit“.';
+  const invitationHint=start.pending.length?`${start.pending.length} unbenutzte Einladung${start.pending.length===1?' wird':'en werden'} beim Start geschlossen.`:'';
+  $('panelBody').innerHTML=`<p class="p2p-intro">${p2p.isHost?'Du bist der Gastgeber. Ihr könnt bereits zu zweit starten.':self?.connected?'Du bist mit dem Gastgeber verbunden.':'Du bist der Mitspieler. Schicke deinen Antworttext zurück.'}</p><section class="p2p-start-panel ${ready||(!p2p.isHost&&self?.connected&&self.ready)?'is-ready':''}" aria-label="P2P-Spielstart"><p id="p2pStartHint" role="status" aria-live="polite">${escape(startHint)}</p><div class="p2p-actions"><button class="subtle-button" id="p2pReady" ${self?.connected?'':'disabled'}>${self?.ready?'Bereitschaft zurücknehmen':'Ich bin bereit'}</button>${p2p.isHost?`<button class="primary-button" id="p2pStart" aria-describedby="p2pStartHint" ${ready?'':'disabled'}>Mit ${n} Spielern starten</button>`:''}<button class="subtle-button" id="p2pLeave">Verbindung beenden</button></div>${invitationHint?`<small>${escape(invitationHint)}</small>`:''}</section>${roster}<p class="online-meta">${n} / 4 verbunden · ${room?.config?.heroicTier?'HEROISCH '+room.config.heroicTier+' · ':''}${levels[room?.config?.levelIndex??selectedLevel]?.defense?'12 wachsende Wellen · +'+Math.round(Math.max(0,n-1)*20)+' % Gegner':mobs+' Gegner bei '+(n||1)+' '+(n===1?'Spieler':'Spielern')} · ${escape(levels[room?.config?.levelIndex??selectedLevel]?.name||'Palermo')}</p><p class="online-status" id="p2pStatus" role="status" aria-live="polite">${escape(p2pMessage||'Warte auf die Direktverbindung.')}</p><p class="p2p-error" id="p2pError" role="alert">${escape(p2pErrorMessage)}</p>${warning?`<p class="p2p-help p2p-warning">${escape(warning)}</p>`:''}${body}<p class="p2p-help">Der Mitspieler klickt nach dem Verbinden auf „Ich bin bereit“. Dann startet der Gastgeber mit der oben angezeigten Spielerzahl. Freie Plätze und unbenutzte Einladungen verhindern den Start nicht. Der Gastgeber muss im Spiel bleiben.</p>`;
   if(p2p.isHost){
    $('p2pNewInvitation').onclick=()=>runP2P(()=>p2p.createInvitation(),'Einladung wird erstellt. Bitte kurz warten …');
    if($('p2pRefreshInvitation'))$('p2pRefreshInvitation').onclick=()=>{const slot=p2pSelectedSlot;runP2P(async()=>{p2p.removePeer(slot);delete p2pSignals[slot];delete p2pWarnings[slot];await p2p.createInvitation(slot);},'Neue Einladung für diesen Spieler wird erstellt …');};
