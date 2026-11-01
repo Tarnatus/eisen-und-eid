@@ -1,2 +1,5 @@
 # IDE
 .idea/
+
+# Python-Umgebung für Entwicklungswerkzeuge (uv)
+.venv/
