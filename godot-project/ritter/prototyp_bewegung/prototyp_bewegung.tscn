@@ -1,0 +1,25 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ritter/prototyp_bewegung/prototyp_bewegung.gd" id="1_bewegung"]
+[ext_resource type="Script" path="res://ritter/prototyp_bewegung/prototyp_raster.gd" id="2_raster"]
+[ext_resource type="Script" path="res://ritter/prototyp_bewegung/prototyp_ritter_bewegung.gd" id="3_ritter"]
+
+[node name="PrototypBewegung" type="Node2D"]
+script = ExtResource("1_bewegung")
+
+[node name="Raster" type="Node2D" parent="."]
+script = ExtResource("2_raster")
+
+[node name="Ritter" type="Node2D" parent="."]
+script = ExtResource("3_ritter")
+
+[node name="Kamera" type="Camera2D" parent="."]
+process_callback = 0
+
+[node name="Anzeige" type="CanvasLayer" parent="."]
+
+[node name="Text" type="Label" parent="Anzeige"]
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 476.0
+offset_bottom = 80.0
