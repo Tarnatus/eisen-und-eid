@@ -20,6 +20,10 @@ _Avoid_: Hauptmann, Endgegner
 Die kleinste Einheit des Geländes; Blöcke können zerstört werden.
 _Avoid_: Tile, Kachel (für das Spielkonzept)
 
+**Plattform**:
+Ein Block, durch den man von unten hindurchspringt und auf dem man oben steht.
+_Avoid_: One-Way-Plattform, Durchspring-Block
+
 **Gefangener**:
 Ein eingesperrter Verbündeter im Level, den Ritter befreien können.
 _Avoid_: Geisel, Prisoner

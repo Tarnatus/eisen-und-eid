@@ -22,6 +22,9 @@ Ein spielbarer Godot-4.7.2-Prototyp: ein kleines Level (Palermo) mit Boss (Kamel
 
 <!-- eine Zeile pro geschlossenem Ticket -->
 
+- [Bewegung zum Anfassen](tickets/05-bewegung-zum-anfassen.md): Broforce-Werte unverändert übernommen (Lauf 110, Sprung 260 bei 0,123 s Halten, Schwerkraft 1100, Wandrutschen 40, Kanten-Flip an); Prototyp auf Branch `prototype/bewegung`.
+- [Kollision des Ritters](tickets/11-kollision-des-ritters.md): eigene AABB-Kollision gegen das Block-Raster für alles auf dem Gelände, TileMapLayer nur Anzeige, Körper blockieren sich nicht, Angriffe über `Area2D`, Plattform-Blöcke von Anfang an.
+- [Auflösung, Pixel- und Kachelgröße](tickets/04-aufloesung-pixel-kachel.md): 480 × 270 intern, Block 16 px, Ritter 12 × 18 (Sprite 32 × 32), `viewport` + ganzzahlig + 16:9, feste Koop-Zoomstufe.
 - [Wie baut man zerstörbares Block-Gelände in Godot 4.7?](tickets/03-zerstoerbares-gelaende.md): TileMapLayer für Bild und Kollision, eigenes Raster als Wahrheit, Einsturz und Trümmer als Eigenbau, AABB-Kollision als Plan B.
 - [Wie fühlt sich Broforce-Bewegung an?](tickets/02-broforce-bewegung.md): Broforce-Werte aus Mod-Code (Block 16 px, Figur 12×18, Sprung 260 px/s gehalten, Schwerkraft 1100, Wandrutschen 40 px/s); Kollisionstechnik als eigenes Ticket.
 - [Projektstruktur im Godot-Projekt](tickets/01-projektstruktur.md): typisiertes GDScript mit deutschen Namen (Umlaute umgeschrieben), Ordner nach Spielinhalt, wenige Autoloads; Regeln in `CLAUDE.md`, gdtoolkit projektlokal über uv.
