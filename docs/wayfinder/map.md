@@ -16,12 +16,16 @@ Ein spielbarer Godot-4.7.2-Prototyp: ein kleines Level (Palermo) mit Boss (Kamel
 - Grafik: erst Platzhalter-Pixel-Sprites; Aseprite ist installiert.
 - Skills für jede Session: `grilling`, `domain-modeling`. Glossar: `GLOSSARY.md` im Repo-Root.
 - Tracker: lokale Markdown-Dateien. Karte `docs/wayfinder/map.md`, Tickets `docs/wayfinder/tickets/NN-*.md` (Frontmatter: `type`, `status` open/closed, `assignee` = Claim, `blocked_by` = Ticketnummern). Recherche-Ergebnisse in `docs/wayfinder/research/`. Späterer Umzug zu GitHub Issues möglich.
+- Was von Hand eingerichtet werden muss (nicht über Repo-Dateien gefunden), steht in `README.md`, damit ein neuer Mensch mit neuem Agenten das Projekt aufsetzen kann.
 - Git-Schreibvorgänge macht immer der Mensch.
 
 ## Decisions so far
 
 <!-- eine Zeile pro geschlossenem Ticket -->
 
+- [Agenten-Werkzeuge für Godot auswählen](tickets/19-agenten-werkzeuge-auswaehlen.md): ohne Editor und projektlokal: MindsMaster-Skills, `gda` (CLI), GdUnit4 v6.2.3, Renderer Compatibility, eigener Skill `godot-werkzeuge`; fehlende Typen nur Warnung plus `typen_pruefen.sh`; kein Godot-MCP.
+- [Welche Godot-Skills gibt es online für Agenten?](tickets/16-godot-skills-fuer-agenten.md): rund 30 Funde; `godot:godot` und der vorhandene MCP taugen wenig, Vorschlag A ist ein headless Werkzeugkasten (MindsMaster-Skills, `gda`, Screenshot-Test, GdUnit4, eigener TileMapLayer-Skill).
+- [Palermo: Aufbau und Gegner](tickets/08-palermo-aufbau-gegner.md): ~10 Bildbreiten in sechs Abschnitten (Hafen, Lagerhäuser, Stadtmauer, Altstadt, Markt, Tor), Säbelkämpfer/Bogenschütze/Schildträger mit 1 Treffer, ein Katapult, Ölfässer, 4 Gefangene, Beilkisten, Kamelherde als Vorgeschmack; gemalt in `TileMapLayer`.
 - [Koop-Regeln für 1–4 Spieler](tickets/07-koop-regeln.md): gemeinsamer Vorrat an Leben (3 pro Spieler), Ross bringt Ritter ins aktuelle Bild (keine Checkpoints), Drop-in, zwei Spieler pro Tastatur, Bildrand als Wand, kein Friendly-Fire-Schaden, nur der Boss skaliert; Gefangene +1 Leben.
 - [Moveset im Kampf](tickets/06-kampf-moveset.md): Beil & Schild für alle, 1 Treffer = tot, Schlag/Powerschlag nach vorn, oben und unten, Schild vorn/oben, Bumerangaxt mit 3 Ladungen, Blöcke weich/hart/unzerstörbar; Bau mit Abstimmung am echten Ritter.
 - [Bewegung zum Anfassen](tickets/05-bewegung-zum-anfassen.md): Broforce-Werte unverändert übernommen (Lauf 110, Sprung 260 bei 0,123 s Halten, Schwerkraft 1100, Wandrutschen 40, Kanten-Flip an); Prototyp auf Branch `prototype/bewegung`.
@@ -36,7 +40,7 @@ Ein spielbarer Godot-4.7.2-Prototyp: ein kleines Level (Palermo) mit Boss (Kamel
 - HUD: Vorrat an Leben, Bumerangaxt-Ladungen, Boss-Leiste, Spieleranzeige für bis zu 4 Spieler (inkl. „wartet auf ein Leben“).
 - Start und Ende eines Durchlaufs: Titelbild (Beitritt per Drop-in ist entschieden), Sieg, Game Over, Neustart, Pause.
 - Wut und Berserker aus dem Webspiel: ja oder nein? Offen gelassen in „Moveset im Kampf“.
-- Bau-Tickets für Level, Gegner und Boss, sobald deren Design steht.
+- Bau-Ticket für den Boss, sobald „Kamelhauptmann: Boss-Design“ steht.
 - Export/Zielplattform des Prototyps.
 
 ## Out of scope

@@ -59,3 +59,35 @@ _Avoid_: Respawn, Wiederbelebung
 **Ross**:
 Das Pferd, das einen Ritter beim Wiedereinstieg und Beitritt ins Bild bringt und beim Austritt abholt; berührt nichts im Level.
 _Avoid_: Pferd, Reittier
+
+**Gegner**:
+Eine feindliche Figur im Level, die Ritter angreift; der Boss ist ein besonderer Gegner.
+_Avoid_: Feind, Mob, Enemy
+
+**Säbelkämpfer**:
+Ein Gegner, der im Nahkampf auf Ritter zuläuft.
+_Avoid_: Sarazene, Schwertkämpfer
+
+**Bogenschütze**:
+Ein Gegner, der Abstand hält und Pfeile schießt.
+_Avoid_: Schütze, Archer
+
+**Schildträger**:
+Ein Gegner, der sich nach vorn mit einem Schild schützt.
+_Avoid_: Schildwache, Verteidiger
+
+**Katapult**:
+Eine fest stehende Belagerungswaffe der Gegner, deren Steine Blöcke zerstören.
+_Avoid_: Schleuder, Wurfmaschine
+
+**Ölfass**:
+Ein Fass im Level, das bei einem Treffer explodiert und alles in der Nähe trifft, auch Ritter.
+_Avoid_: Fass, Sprengfass, Barrel
+
+**Beilkiste**:
+Eine Holzkiste im Level, die beim Zerschlagen eine Ladung für die Bumerangaxt freigibt.
+_Avoid_: Kiste, Munitionskiste, Crate
+
+**Kamelherde**:
+Eine Gruppe von Kamelen, die nach einer Warnung quer durchs Bild stürmt und alles umrennt.
+_Avoid_: Herde, Stampede

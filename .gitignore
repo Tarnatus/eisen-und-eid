@@ -3,3 +3,6 @@
 
 # Python-Umgebung für Entwicklungswerkzeuge (uv)
 .venv/
+
+# Godot-Klassenreferenz für Agenten (godot --doctool, lokal erzeugt)
+.godot-doku/

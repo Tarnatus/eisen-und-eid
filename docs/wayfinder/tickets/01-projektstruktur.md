@@ -19,3 +19,5 @@ Festgehalten in [`CLAUDE.md`](../../../CLAUDE.md) (Symlink `AGENTS.md`), Einrich
 - Ordner nach Spielinhalt (`ritter/`, `gegner/`, `bosse/`, `level/`, `gelaende/`, `ui/`, `audio/`, `autoload/`, `gemeinsam/`), angelegt erst bei Bedarf.
 - Wenige Autoloads, angelegt erst bei Bedarf: `Ereignisse` (nur spielweite Signale), `Musik`, `Mitspieler`; in Szenen „call down, signal up“.
 - `gdtoolkit` projektlokal über uv (`pyproject.toml`, `.venv/`), Aufruf `uv run gdformat|gdlint`. Nichts wird global installiert.
+
+**Nachtrag:** Fehlende Typen sind seit „Agenten-Werkzeuge für Godot auswählen“ nur noch eine Warnung; geprüft wird mit `typen_pruefen.sh`.

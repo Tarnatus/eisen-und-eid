@@ -7,6 +7,12 @@
       "skillPath": "skills/engineering/domain-modeling/SKILL.md",
       "computedHash": "b3eb40152b81f0c98fd2095a023c019452dbdce56f7540cc67fece2972db8369"
     },
+    "godot-visual-test": {
+      "source": "dannroda/godot-agent-plugins",
+      "sourceType": "github",
+      "skillPath": "plugins/godot-testing/skills/godot-visual-test/SKILL.md",
+      "computedHash": "c15ebe7a6ca516a97a23e4b90568236afb46560358b3cf277c0ca5aaccb1c24f"
+    },
     "grilling": {
       "source": "mattpocock/skills",
       "sourceType": "github",

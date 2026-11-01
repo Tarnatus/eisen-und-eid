@@ -3,7 +3,7 @@ title: Ritter-Bewegung bauen
 type: task
 status: open
 assignee:
-blocked_by: [01, 05, 11]
+blocked_by: [01, 05, 11, 19]
 ---
 
 ## Question

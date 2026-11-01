@@ -1,3 +1,10 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+
+# Live-Harness von gda (nur während eines Live-Tests vorhanden)
+/addons/gda_harness/
+
+# Testberichte von GdUnit4
+/reports/
+/override.cfg

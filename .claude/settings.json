@@ -1,5 +1,16 @@
 {
+  "env": {
+    "GDA_GODOT": "godot"
+  },
+  "extraKnownMarketplaces": {
+    "godot-claude-code-skills": {
+      "source": {
+        "source": "github",
+        "repo": "MindsMaster/godot-claude-code-skills"
+      }
+    }
+  },
   "enabledPlugins": {
-    "godot@godot-claude-skills": true
+    "godot-skills@godot-claude-code-skills": true
   }
 }
