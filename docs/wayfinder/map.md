@@ -22,6 +22,8 @@ Ein spielbarer Godot-4.7.2-Prototyp: ein kleines Level (Palermo) mit Boss (Kamel
 
 <!-- eine Zeile pro geschlossenem Ticket -->
 
+- [Koop-Regeln für 1–4 Spieler](tickets/07-koop-regeln.md): gemeinsamer Vorrat an Leben (3 pro Spieler), Ross bringt Ritter ins aktuelle Bild (keine Checkpoints), Drop-in, zwei Spieler pro Tastatur, Bildrand als Wand, kein Friendly-Fire-Schaden, nur der Boss skaliert; Gefangene +1 Leben.
+- [Moveset im Kampf](tickets/06-kampf-moveset.md): Beil & Schild für alle, 1 Treffer = tot, Schlag/Powerschlag nach vorn, oben und unten, Schild vorn/oben, Bumerangaxt mit 3 Ladungen, Blöcke weich/hart/unzerstörbar; Bau mit Abstimmung am echten Ritter.
 - [Bewegung zum Anfassen](tickets/05-bewegung-zum-anfassen.md): Broforce-Werte unverändert übernommen (Lauf 110, Sprung 260 bei 0,123 s Halten, Schwerkraft 1100, Wandrutschen 40, Kanten-Flip an); Prototyp auf Branch `prototype/bewegung`.
 - [Kollision des Ritters](tickets/11-kollision-des-ritters.md): eigene AABB-Kollision gegen das Block-Raster für alles auf dem Gelände, TileMapLayer nur Anzeige, Körper blockieren sich nicht, Angriffe über `Area2D`, Plattform-Blöcke von Anfang an.
 - [Auflösung, Pixel- und Kachelgröße](tickets/04-aufloesung-pixel-kachel.md): 480 × 270 intern, Block 16 px, Ritter 12 × 18 (Sprite 32 × 32), `viewport` + ganzzahlig + 16:9, feste Koop-Zoomstufe.
@@ -31,10 +33,9 @@ Ein spielbarer Godot-4.7.2-Prototyp: ein kleines Level (Palermo) mit Boss (Kamel
 
 ## Not yet specified
 
-- Platzhalter-Grafiken selbst: Stil, Animationsliste, Palette (nach Auflösung und Moveset).
-- HUD: Leben, Boss-Leiste, Spieleranzeige für bis zu 4 Spieler.
-- Start und Ende eines Durchlaufs: Titelbild, Beitritt, Sieg/Niederlage, Neustart.
-- Was befreite Gefangene bringen (Extraleben, Heilung, Wiedereinstieg?).
+- HUD: Vorrat an Leben, Bumerangaxt-Ladungen, Boss-Leiste, Spieleranzeige für bis zu 4 Spieler (inkl. „wartet auf ein Leben“).
+- Start und Ende eines Durchlaufs: Titelbild (Beitritt per Drop-in ist entschieden), Sieg, Game Over, Neustart, Pause.
+- Wut und Berserker aus dem Webspiel: ja oder nein? Offen gelassen in „Moveset im Kampf“.
 - Bau-Tickets für Level, Gegner und Boss, sobald deren Design steht.
 - Export/Zielplattform des Prototyps.
 
