@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ritter/bumerangaxt/bumerangaxt.gd" id="1_axt"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_axt"]
+size = Vector2(10, 10)
+
+[node name="Bumerangaxt" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("1_axt")
+
+[node name="Form" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_axt")

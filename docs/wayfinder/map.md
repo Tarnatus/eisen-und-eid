@@ -23,6 +23,9 @@ Ein spielbarer Godot-4.7.2-Prototyp: ein kleines Level (Palermo) mit Boss (Kamel
 
 <!-- eine Zeile pro geschlossenem Ticket -->
 
+- [Ritter-Bewegung bauen](tickets/12-ritter-bewegung-bauen.md): `Ritter extends Koerper` (gemeinsamer Kasten-Baustein), `Gelaende` liest die `TileMapLayer` ins Raster (Art als Custom Data), Testraum als Startszene; fühlt sich an wie der Prototyp.
+- [Musik und Soundeffekte](tickets/10-musik-und-sfx.md): Ritter Krass im Level, Eisen und Eid im Bosskampf mit Horn-Wechsel und Refrain als Song-Moment, Kleiner Ritter für Titel und Game Over; MP3 in Schleife mit Überblenden; Busse Musik/Effekte ohne Absenken; Sounds von Kenney (CC0) plus jsfxr.
+- [Kamelhauptmann: Boss-Design](tickets/09-kamelhauptmann.md): Reiter auf Kamel in fester Ein-Bild-Arena, nur in der Knie-Pause verwundbar; Lanzenansturm, Herde von der Seite und aus dem Hintergrund, ab 50 % Spucken; doppelte Warnung; 40/64/88/112 Lebenspunkte; Ross wartet auf die Pause.
 - [Agenten-Werkzeuge für Godot auswählen](tickets/19-agenten-werkzeuge-auswaehlen.md): ohne Editor und projektlokal: MindsMaster-Skills, `gda` (CLI), GdUnit4 v6.2.3, Renderer Compatibility, eigener Skill `godot-werkzeuge`; fehlende Typen nur Warnung plus `typen_pruefen.sh`; kein Godot-MCP.
 - [Welche Godot-Skills gibt es online für Agenten?](tickets/16-godot-skills-fuer-agenten.md): rund 30 Funde; `godot:godot` und der vorhandene MCP taugen wenig, Vorschlag A ist ein headless Werkzeugkasten (MindsMaster-Skills, `gda`, Screenshot-Test, GdUnit4, eigener TileMapLayer-Skill).
 - [Palermo: Aufbau und Gegner](tickets/08-palermo-aufbau-gegner.md): ~10 Bildbreiten in sechs Abschnitten (Hafen, Lagerhäuser, Stadtmauer, Altstadt, Markt, Tor), Säbelkämpfer/Bogenschütze/Schildträger mit 1 Treffer, ein Katapult, Ölfässer, 4 Gefangene, Beilkisten, Kamelherde als Vorgeschmack; gemalt in `TileMapLayer`.
@@ -40,7 +43,6 @@ Ein spielbarer Godot-4.7.2-Prototyp: ein kleines Level (Palermo) mit Boss (Kamel
 - HUD: Vorrat an Leben, Bumerangaxt-Ladungen, Boss-Leiste, Spieleranzeige für bis zu 4 Spieler (inkl. „wartet auf ein Leben“).
 - Start und Ende eines Durchlaufs: Titelbild (Beitritt per Drop-in ist entschieden), Sieg, Game Over, Neustart, Pause.
 - Wut und Berserker aus dem Webspiel: ja oder nein? Offen gelassen in „Moveset im Kampf“.
-- Bau-Ticket für den Boss, sobald „Kamelhauptmann: Boss-Design“ steht.
 - Export/Zielplattform des Prototyps.
 
 ## Out of scope

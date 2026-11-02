@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://gelaende/gelaende.gd" id="1_gelaende"]
+[ext_resource type="TileSet" path="res://gelaende/bloecke.tres" id="2_bloecke"]
+
+[node name="Gelaende" type="Node2D"]
+script = ExtResource("1_gelaende")
+
+[node name="Bloecke" type="TileMapLayer" parent="."]
+tile_set = ExtResource("2_bloecke")

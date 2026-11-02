@@ -16,6 +16,14 @@ _Avoid_: Kapitel, Map, Stage
 Der besondere Gegner am Ende eines Levels; sein Sieg beendet das Level.
 _Avoid_: Hauptmann, Endgegner
 
+**Arena**:
+Der abgeschlossene Ort am Ende eines Levels, an dem der Bosskampf stattfindet.
+_Avoid_: Bossraum, Kampfplatz
+
+**Phase**:
+Ein Abschnitt des Bosskampfs, in dem der Boss sich anders verhält.
+_Avoid_: Stufe, Stage
+
 **Block**:
 Die kleinste Einheit des Geländes; Blöcke können zerstört werden.
 _Avoid_: Tile, Kachel (für das Spielkonzept)

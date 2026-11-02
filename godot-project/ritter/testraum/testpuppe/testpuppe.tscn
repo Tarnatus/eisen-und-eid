@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ritter/testraum/testpuppe/testpuppe.gd" id="1_puppe"]
+[ext_resource type="Script" path="res://gemeinsam/trefferzone.gd" id="2_trefferzone"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_puppe"]
+size = Vector2(12, 18)
+
+[node name="Testpuppe" type="Node2D"]
+script = ExtResource("1_puppe")
+
+[node name="Trefferzone" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("2_trefferzone")
+
+[node name="Form" type="CollisionShape2D" parent="Trefferzone"]
+position = Vector2(0, -9)
+shape = SubResource("RectangleShape2D_puppe")
